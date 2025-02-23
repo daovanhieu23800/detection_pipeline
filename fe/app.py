@@ -10,9 +10,6 @@ TABLE_API_URL = "http://flask-be:5000/record"
 
 
 def send_image_to_api(image_file):
-    """
-    Sends an uploaded image to the detection API.
-    """
     files = {"image": (image_file.name, image_file, image_file.type)}
     response = requests.post(IMAGE_API_URL, files=files)
     return response
@@ -20,7 +17,6 @@ def send_image_to_api(image_file):
 
 def render_image_detection():
     st.title("Image Detection API Client")
-    st.write("Upload an image and the API will process it for detection.")
 
     image_file = st.file_uploader(
         "Choose an image...", type=["jpg", "jpeg", "png"])
@@ -41,12 +37,9 @@ def render_image_detection():
             st.image(
                 image_rgb, caption=f"Visualized Image, There are {result['n_person']} people")
             st.success("Image processed successfully!")
-            # st.json(result)
         else:
             st.error(
                 f"API request failed with status code {response.status_code}")
-            # except Exception as e:
-            #     st.error(f"An error occurred while sending the image: {e}")
 
 
 def render_table_viewer():
@@ -74,7 +67,6 @@ def render_table_viewer():
         st.error(f"Error occurred while fetching table data: {e}")
 
 
-# Sidebar navigation to switch between pages
 page = st.sidebar.selectbox("Select Page", ["Image Detection", "Table Viewer"])
 
 if page == "Image Detection":

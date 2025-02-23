@@ -37,7 +37,7 @@ def minio_connect():
         "minio:9000",
         access_key="minioaccesskey",
         secret_key="miniosecretkey",
-        secure=False  # Set to True if using HTTPS
+        secure=False
     )
     return minio_client
 
@@ -105,12 +105,11 @@ def landing_page():
 
 @app.route("/detection", methods=["POST"])
 def detect_person():
-    # image_file = request.files["file"].read()
+
     image_file = request.files['image']
     image_name = image_file.filename
     file_bite = np.frombuffer(image_file.read(), np.uint8)
     orig_image = cv2.imdecode(file_bite, cv2.IMREAD_COLOR)
-    # orig_image = cv2.cvtColor(orig_image, cv2.COLOR_BGR2RGB)
     result = detect_model(orig_image)
     boxes = result[0].boxes
     person_boxes = boxes.xyxy[boxes.data[:, 5] == 0]
@@ -141,22 +140,13 @@ def detect_person():
 def GET_RECORD():
     page_number = request.args.get("page_number", default=1, type=int)
     page_size = 5
-    # conn = postgres_connect()
     cursor = postgres_client.cursor()
 
-    # Fetch all records
-    # Replace with your table name
     cursor.execute(
         f"SELECT * FROM file_visualization LIMIT {page_size} OFFSET ({page_number} - 1) * {page_size}")
     records = cursor.fetchall()
-
-    # Get column names
     col_names = [desc[0] for desc in cursor.description]
-
-    # Convert records to list of dicts
     result = [dict(zip(col_names, row)) for row in records]
-
-    # Close connections
     cursor.close()
 
     return jsonify(result), 200  # Return records as JSON
