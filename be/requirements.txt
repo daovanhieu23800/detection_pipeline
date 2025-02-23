@@ -1,0 +1,8 @@
+flask
+torch
+ultralytics
+numpy
+opencv-python-headless
+minio
+psycopg2-binary
+mlflow

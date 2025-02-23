@@ -1,0 +1,22 @@
+FROM python:3.9-slim
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libpq-dev \
+ && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application code into the container
+COPY . .
+
+# Expose the port that the Flask app listens on
+EXPOSE 5000
+
+# Set the environment variable for Flask to point to your app file
+ENV FLASK_APP=app.py
+
+# Use the flask CLI to run the application on 0.0.0.0 so it is accessible externally
+CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
