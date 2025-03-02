@@ -14,5 +14,5 @@ class StressTestUser(HttpUser):
                 image_path), img_file, "image/jpeg")}
             response = self.client.post("/detection", files=files)
             if response.status_code == 200:
-                    result = response.json()
-                    print(f"Detected {result['n_person']} persons in image.")
+                result = response.json()
+                print(f"Detected {result['n_person']} persons in image.")

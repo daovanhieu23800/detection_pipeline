@@ -28,19 +28,19 @@ services:
     ports:
       - "5432:5432"
     restart: unless-stopped
-  flask-be:
+  fastapi-be:
     build: 
-      context: ./be
+      context: ./back_end
       dockerfile: Dockerfile
     ports:
-      - "5000:5000"
+      - "8000:8000"
     depends_on:
       - mlflow
-  streamlit:
+  nextjs-fe:
     build:
-      context: ./fe
+      context: ./front_end/my-app
       dockerfile: Dockerfile
     ports:
-      - "8501:8501"
+      - "3000:3000"
     depends_on:
-      - flask-be
+      - fastapi-be
